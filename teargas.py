@@ -1,6 +1,6 @@
 import spotify
 import imdb
-import pyquiz
+import quiz
 import chucknorrisjokes
 import steam
 
