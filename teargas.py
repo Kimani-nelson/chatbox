@@ -1,7 +1,7 @@
 import spotify
 import imdb
 import quiz
-import chucknorrisjokes
+import chucknorris
 import steam
 
 class Teargas:
