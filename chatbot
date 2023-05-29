@@ -1,0 +1,51 @@
+import os
+import sys
+import random
+import string
+import requests
+import json
+import pandas as pd
+import numpy as np
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+from chatterbot.storage import SQLStorageAdapter
+from flask import Flask, request
+
+# Create the chatbot
+chatbot = ChatBot(
+    "Teargas001",
+    logic_adapters=[
+        "chatterbot.logic.BestMatchAdapter",
+        "chatterbot.logic.ResponseSelectorAdapter",
+    ],
+    storage_adapter="chatterbot.storage.SQLStorageAdapter",
+)
+
+# Train the chatbot
+trainer = ChatterBotCorpusTrainer(chatbot)
+trainer.train(
+    "chatterbot.corpus.english",
+    "chatterbot.corpus.movie_lines",
+    "chatterbot.corpus.music",
+    "chatterbot.corpus.personality_quiz",
+    "chatterbot.corpus.fun_facts",
+    "chatterbot.corpus.game_recommendations",
+)
+
+# Create the Flask app
+app = Flask(__name__)
+
+# Home route
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+# Get route
+@app.route("/get")
+def get_bot_response():
+    user_text = request.args.get("msg")
+    return str(chatbot.get_response(user_text))
+
+# Run the app
+if __name__ == "__main__":
+    app.run()
